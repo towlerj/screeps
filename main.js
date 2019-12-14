@@ -1,12 +1,12 @@
-let roleHarvester = require('role.harvester');
-let roleUpgrader = require('role.upgrader');
-let roleBuilder = require('role.builder');
-let roleRepairer = require('role.repairer');
+//let roleHarvester = require('role.harvester');
+//let roleUpgrader = require('role.upgrader');
+//let roleBuilder = require('role.builder');
+//let roleRepairer = require('role.repairer');
 let createCreep = require('create.creeps');
 let roomMem = require('misc.roomMem');
 let miscUtils = require('misc.constructionSites');
 let creepController = require('misc.creepController');
-
+let tempTest = require('misc.temp');
 //require('misc.utils2');
 
 module.exports.loop = function () {
@@ -27,7 +27,7 @@ module.exports.loop = function () {
     
 
     
-    if (Game.time % 100 == 2){
+    if (Game.time % 50 == 2){
         console.log('Harvesters: ' + harvesters.length);
         console.log('Upgraders: ' + upgraders.length);
         console.log('Builders: ' + builders.length);
@@ -39,6 +39,10 @@ module.exports.loop = function () {
             if(!Game.creeps[i]) {
                 delete Memory.creeps[i];
             }
+        }
+    } else if (Game.time % 51 == 2){
+        for(var name in Game.rooms) {
+            console.log('Room "'+name+'" has '+Game.rooms[name].energyAvailable+' energy');
         }
     }
 
@@ -63,24 +67,6 @@ module.exports.loop = function () {
         let creep = Game.creeps[name];
         if (Game.creeps[name].ticksToLive < CREEP_LIFE_TIME ){
             creepController.run(creep);
-            /*
-            switch (creep.memory.role){
-                case "harvester":
-                    roleHarvester.run(creep);
-                    break;
-                case "upgrader":
-                    roleUpgrader.run(creep);
-                    break;
-                case "repairer":
-                    roleRepairer.run(creep);
-                    break;
-                case "builder":
-                    roleBuilder.run(creep);
-                    break;
-                default:
-                    console.log("Unknown type in work: "+creep);
-            }
-             */
         }
     }
 };

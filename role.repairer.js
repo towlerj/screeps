@@ -22,16 +22,19 @@ let roleRepairer =
 
             if(creep.memory.repairing)
             {
+                /*
                 const targets = creep.room.find(FIND_STRUCTURES, {
                     filter: object => object.hits < object.hitsMax
                 });
                 targets.sort((a,b) => a.hits - b.hits);
-                if(targets.length) {
-                    if(creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
-                        //creep.say('repair');
+
+                 */
+                //if(targets.length) {
+                    if(creep.repair(creep.memory.repairTarget) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(creep.memory.repairTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+                        creep.say('repair');
                     }
-                }
+                //}
             }
             else
             {
