@@ -1,15 +1,16 @@
 
-var miscUtils = {
+let miscConstructionSites = {
 
     /** @param {Creep} creep **/
     constructionSites: function(creep) {
-        //console.log('miscutils.constsites');
+
         
-        //let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+
         return creep.room.find(FIND_CONSTRUCTION_SITES);
-        //return targets;
+
     }
     /*
+
     energyInRoom: function(creep){
         var energyAvailable = 0;
         energyAvailable += Game.spawns.Spawn1.energy;
@@ -25,4 +26,4 @@ var miscUtils = {
     */
 };
 
-module.exports = miscUtils;
+module.exports = miscConstructionSites;

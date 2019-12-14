@@ -1,45 +1,55 @@
-var roleBuilder = require('role.builder');
+//let roleBuilder = require('role.builder');
+let roleHarvester = require('role.harvester');
+let roleUpgrader = require('role.upgrader');
 
-var roleRepairer = {
+let roleRepairer =
+    {
+        /** @param {Creep} creep **/
+        run: function(creep) {
 
-    /** @param {Creep} creep **/
-    run: function (creep) {
-        //console.log('targets' );
-        /*
-        if(creep.memory.repairing && creep.store[RESOURCE_ENERGY] == 0) {
-            creep.memory.repairing = false;
-            creep.say('🔄 repair');
-        }
-        if(!creep.memory.repairing && creep.store.getFreeCapacity() == 0) {
-            creep.memory.repairing = true;
-            creep.say('🚧 repair');
-        }
-        */
-
-        
-        if (creep.store.getFreeCapacity() <= 0) {
-        } else {
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: object => object.hits < object.hitsMax
-            });
-        }
-        targets.sort((a, b) => a.hits - b.hits);
-        
-        //console.log('targets'+ targets[0]);
-        if  (creep.store[RESOURCE_ENERGY] == 0) {
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+            if(creep.memory.repairing && creep.carry.energy == 0) {
+                creep.memory.repairing = false;
+                //creep.say('🔄 R: Hrv');
             }
-        }
-        else if (targets.length > 0) {
-            if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(targets[0]);
+            else if(!creep.memory.repairing && creep.carry.energy < creep.carryCapacity) {
+                creep.memory.repairing = false;
+                //creep.say('🔄 R: Hrv');
             }
-        
-        } else {
-            roleBuilder.run(creep);
+            else if(!creep.memory.repairing && creep.carry.energy == creep.carryCapacity) {
+                creep.memory.repairing = true;
+                //creep.say('🚧 repair');
+            }
+
+            if(creep.memory.repairing)
+            {
+                const targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: object => object.hits < object.hitsMax
+                });
+                targets.sort((a,b) => a.hits - b.hits);
+                if(targets.length) {
+                    if(creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                        //creep.say('repair');
+                    }
+                }
+            }
+            else
+            {
+                var sources = creep.room.find(FIND_SOURCES);
+                if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                } else {
+
+                    if (creep.memory.role == 'builder'){
+                        //console.log('Builder Repairer is an upgrader');
+                        roleUpgrader.run(creep);
+                    } else {
+                        //console.log('Repairer is a harvester');
+                        roleHarvester.run(creep);
+                    }
+                }
+            }
         }
     }
-};
+
 module.exports = roleRepairer;
