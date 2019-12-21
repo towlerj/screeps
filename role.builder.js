@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 let roleRepairer = require('role.repairer');
+=======
+var roleUpgrader = require('role.upgrader');
+>>>>>>> f11448e9eee1c656b1d234e990c207b19bc4b2c5
 
 var roleBuilder = {
 
@@ -15,15 +19,33 @@ var roleBuilder = {
         }
 
         if(creep.memory.building) {
+<<<<<<< HEAD
             if(creep.build(creep.memory.buildTarget) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.memory.buildTarget, {visualizePathStyle: {stroke: '#ffffff'}});
             }
         }
         else {
+=======
+            var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+            if(targets.length) {
+                if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+            }
+        }
+        else {
+            roleUpgrader.run(creep);
+            /*
+>>>>>>> f11448e9eee1c656b1d234e990c207b19bc4b2c5
             var sources = creep.room.find(FIND_SOURCES);
             if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
             }
+<<<<<<< HEAD
+=======
+
+             */
+>>>>>>> f11448e9eee1c656b1d234e990c207b19bc4b2c5
         }
     }
 };
