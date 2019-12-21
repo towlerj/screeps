@@ -2,28 +2,13 @@ let roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        
-        
-        if (creep.memory.role == 'superharvester'){
-            creep.say('S');
-            //console.log('super');
-        } else {
-            creep.say('H');
-        }
-        
+        const remoteRoom = creep.memory.remoteRoom;
+        const homeRoom = creep.memory.homeRoom;
         
         if(creep.store.getFreeCapacity() > 0) {
             let sources = creep.room.find(FIND_SOURCES);
-            if (creep.memory.type == 'harvester'){
-                var useSource = sources[1];
-            } else {
-                var useSource = sources[0];
-            }
-            
-            
-            if(creep.harvest(useSource) == ERR_NOT_IN_RANGE) {
-                //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                creep.moveTo(useSource);
+            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(sources[0]);
             }
         }
         else {
@@ -37,7 +22,6 @@ let roleHarvester = {
             });
             if(targets.length > 0) {
                 if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    //creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                     creep.moveTo(targets[0]);
                 }
             }

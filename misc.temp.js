@@ -20,8 +20,34 @@ USEFUL CODE
 
 
 module.exports = {
-    run: function(creep){
-
+    run: function(){
+        
+        /*
+        for (let s in Room.Source){
+            console.log('Source: ' + s.energy);
+        }
+        */
+        
+        const sources = Game.rooms['W2N5'].find[FIND_SOURCES];
+        //console.log(sources[sources[0]);
+        for (s in sources){
+            console.log(s.pos);
+        }
+        
+        /*
+        // SUICIDE Long Distnace Harvesters
+        let longDistanceHarvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'longDistanceHarvester');
+        let minimumLongDistanceHarvester = 2;
+        for(let name in Game.creeps) {
+            let creep = Game.creeps[name];
+            if (Game.creeps[name].ticksToLive < CREEP_LIFE_TIME ){
+                if (creep.memory.role = 'longDistanceHarvester'){
+                    console.log('SUICIDE');
+                    creep.suicide();
+                }
+            }
+        }
+        */
     }
 
 };
