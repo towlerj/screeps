@@ -22,25 +22,18 @@ let roleRepairer =
 
             if(creep.memory.repairing)
             {
-                /*
-                const targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: object => object.hits < object.hitsMax
-                });
-                targets.sort((a,b) => a.hits - b.hits);
-
-                 */
-                //if(targets.length) {
-                    if(creep.repair(creep.memory.repairTarget) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(creep.memory.repairTarget, {visualizePathStyle: {stroke: '#ffffff'}});
-                        creep.say('repair');
-                    }
-                //}
+                if(creep.repair(creep.memory.repairTarget) == ERR_NOT_IN_RANGE) {
+                    //creep.moveTo(creep.memory.repairTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+                    creep.moveTo(creep.memory.repairTarget);
+                    creep.say('r');
+                }
             }
             else
             {
                 var sources = creep.room.find(FIND_SOURCES);
                 if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                    //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                    creep.moveTo(sources[0]);
                 } else {
 
                     if (creep.memory.role == 'builder'){
