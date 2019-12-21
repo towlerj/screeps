@@ -4,9 +4,12 @@ let roomMem = require('misc.roomMem');
 let miscUtils = require('misc.constructionSites');
 let creepController = require('misc.creepController');
 let tempTest = require('misc.temp');
-
+//require('misc.utils2');
 
 //Global.home = "W2N4";
+/*
+Need to update
+*/
 
 
 
