@@ -1,3 +1,7 @@
+/*
+This is for creating creeps
+*/
+
 const types = ["builder", "harvester", "repairer", "upgrader", "roomtaker", 'superharvester', 'remoteupgrader', "remotebuilder"];
 
 // 'upgrader': [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
