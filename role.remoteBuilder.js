@@ -29,10 +29,11 @@ let roleRemoteBuilder = {
             } else {
 
                 var sources = creep.room.find(FIND_SOURCES);
-                if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+                let sID = Game.time % 2;
+                if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
                     //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
 
-                    creep.moveTo(sources[0]);
+                    creep.moveTo(sources[1]);
                 }
             }
         }

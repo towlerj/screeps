@@ -1,13 +1,4 @@
 /*
- * Module code goes here. Use 'module.exports' to export things:
- * module.exports.thing = 'a thing';
- *
- * You can import it from another modules like this:
- * var mod = require('misc.temp');
- * mod.thing == 'a thing'; // true
- */
-
-/*
 USEFUL CODE
     // memory
     for(var name in Game.rooms) {
@@ -20,20 +11,20 @@ USEFUL CODE
 
 
 module.exports = {
-    run: function(){
-        
+    run: function() {
+
         /*
         for (let s in Room.Source){
             console.log('Source: ' + s.energy);
         }
         */
-        
+
         const sources = Game.rooms['W2N5'].find[FIND_SOURCES];
         //console.log(sources[sources[0]);
-        for (s in sources){
+        for (s in sources) {
             console.log(s.pos);
         }
-        
+
         /*
         // SUICIDE Long Distnace Harvesters
         let longDistanceHarvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'longDistanceHarvester');

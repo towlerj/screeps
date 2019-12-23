@@ -5,24 +5,16 @@ let creepController = require('misc.creepController');
 let tempTest = require('misc.temp');
 //require('misc.utils2');
 
-//Global.home = "W2N4";
-/*
-Need to update
-*/
-
-
-
 module.exports.loop = function() {
 
     //tempTest.run();
 
-    let wantedRooms = ['W2N5', 'W2N4'];
+    let wantedRooms = ['W2N5', 'W2N4', 'W1N4'];
     let homeRoom = 'W2N5';
-    let longDistRoom = 'W2N4';
 
     for (const i in Game.spawns) {
         //console.log(Game.spawns[i].room);
-
+        //console.log(i);
         const myCreeps = Game.spawns[i].room.find(FIND_MY_CREEPS);
         //let myCreep = myCreeps[0];
         //console.log('Creep 0 type', myCreep.memory.role);
@@ -40,39 +32,66 @@ module.exports.loop = function() {
             creep.memory.role == 'harvester' && creep.memory.spawner == i
         ));
 
-        let minimumHarvesters = 1;
-
         let superharvesters = _.filter(Game.creeps, (creep) => (
             creep.memory.role == 'superharvester' && creep.memory.spawner == i
         ));
-        let minimumSuperHarvesters = 3;
 
         let upgraders = _.filter(Game.creeps, (creep) => (
             creep.memory.role == 'upgrader' && creep.memory.spawner == i
         ));
-        let minimumUpgraders = 3;
 
         //let builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
         let builders = _.filter(Game.creeps, (creep) => (
             creep.memory.role == 'builder' && creep.memory.spawner == i
         ));
-        let minimumBuilders = 4;
 
         let repairers = _.filter(Game.creeps, (creep) => (
             creep.memory.role == 'repairer' && creep.memory.spawner == i
         ));
-        let minimumRepairers = 2;
 
         let roomtakers = _.filter(Game.creeps, (creep) => creep.memory.role == 'roomtaker');
+
+        let remoteupgraders = _.filter(Game.creeps, (creep) => (
+            creep.memory.role == 'remoteupgrader' && creep.memory.spawner == i
+        ));
+
+        let remotebuilders = _.filter(Game.creeps, (creep) => (
+            creep.memory.role == 'remotebuilder' && creep.memory.spawner == i
+        ));
+
+        let minimumHarvesters = 1;
+        let minimumUpgraders = 4;
+        let minimumBuilders = 2;
+        let minimumRepairers = 1;
+        let minimumSuperHarvesters = 2;
+
         let maxRoomTakers = 1;
-        const takeRoom = false;
-
-        let remoteupgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'remoteupgrader');
         let minimumRemoteUpgraders = 2;
-        const takenRoom = false;
-
-        let remotebuilders = _.filter(Game.creeps, (creep) => creep.memory.role == 'remotebuilder');
         let minimumRemoteBuilders = 2;
+
+        if (Game.spawns[i].room.energyCapacityAvailable < 600) {
+            minimumHarvesters = 1;
+            minimumUpgraders = 2;
+            minimumBuilders = 1;
+            minimumRepairers = 1;
+            minimumSuperHarvesters = 0;
+        }
+
+        /*
+        if (Game.spawns[i].room.energyCapacityAvailable > 1500) {
+            minimumHarvesters = 1;
+            minimumUpgraders = 2;
+            minimumBuilders = 1;
+            minimumRepairers = 1;
+            minimumSuperHarvesters = 1;
+        }
+        */
+
+        let takeRoom = false;
+        if (i == 'Spawn1') {
+            takeRoom = false;
+        }
+        const takenRoom = false;
 
         if (takeRoom && roomtakers.length < maxRoomTakers) {
             createCreep.run('roomtaker', i);
@@ -92,21 +111,25 @@ module.exports.loop = function() {
             console.log(i + ' Upgraders: ' + upgraders.length + ' of ' + minimumUpgraders);
             console.log(i + ' Builders: ' + builders.length + ' of ' + minimumBuilders);
             console.log(i + ' Repairers: ' + repairers.length + ' of ' + minimumRepairers);
-            console.log('Room Takers: ' + roomtakers.length + ' of ' + maxRoomTakers);
-            console.log(i + 'Super Harvesters: ' + superharvesters.length + ' of ' + minimumSuperHarvesters);
-            console.log('Remote Upgraders: ' + remoteupgraders.length + ' of ' + minimumRemoteUpgraders);
-            console.log('Remote Builders: ' + remotebuilders.length + ' of ' + minimumRemoteBuilders);
-            for (var name in Game.rooms) {
-                console.log('Room "' + name + '" has ' + Game.rooms[name].energyAvailable + ' energy');
+            console.log(i + ' Super Harvesters: ' + superharvesters.length + ' of ' + minimumSuperHarvesters);
+            if (takeRoom) {
+                console.log('Room Takers: ' + roomtakers.length + ' of ' + maxRoomTakers);
             }
-            for (let i in Memory.creeps) {
-                if (!Game.creeps[i]) {
-                    delete Memory.creeps[i];
+            if (takenRoom) {
+                console.log('Remote Upgraders: ' + remoteupgraders.length + ' of ' + minimumRemoteUpgraders);
+                console.log('Remote Builders: ' + remotebuilders.length + ' of ' + minimumRemoteBuilders);
+            }
+            if (i == 'Spawn1') {
+                for (var name in Game.rooms) {
+                    console.log('Room "' + name + '" has ' + Game.rooms[name].energyAvailable + ' energy');
+                    console.log(' and ' + Game.rooms[name].energyCapacityAvailable + ' max energy.');
+                }
+                for (let i in Memory.creeps) {
+                    if (!Game.creeps[i]) {
+                        delete Memory.creeps[i];
+                    }
                 }
             }
-
-
-
         }
         /*
         if (harvesters.length < minimumHarvesters) {
@@ -127,16 +150,17 @@ module.exports.loop = function() {
         */
         if (harvesters.length < minimumHarvesters) {
             createCreep.run('harvester', i);
-        } else if (superharvesters.length < minimumSuperHarvesters) {
-            createCreep.run('superharvester', i);
+        } else if (roomtakers.length < maxRoomTakers && takeRoom) {
+            //console.log('create roomtaker');
+            createCreep.run('roomtaker', i);
         } else if (upgraders.length < minimumUpgraders) {
             createCreep.run('upgrader', i);
         } else if (repairers.length < minimumRepairers) {
             createCreep.run('repairer', i);
         } else if (builders.length < minimumBuilders) {
             createCreep.run('builder', i);
-        } else if (roomtakers.length < maxRoomTakers && takeRoom) {
-            createCreep.run('roomtaker', i);
+        } else if (superharvesters.length < minimumSuperHarvesters) {
+            createCreep.run('superharvester', i);
         } else if (Game.spawns[i].room.energyAvailable > 700) {
             createCreep.run('upgrader', i);
         }

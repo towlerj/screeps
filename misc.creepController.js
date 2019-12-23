@@ -11,7 +11,8 @@ module.exports = {
     run: function(creep) {
         let type = creep.memory.role;
         let room = creep.room;
-
+        //let remoteRoom = 'W2N4';
+        let remoteRoom = 'W1N4';
         /*
         //if (creep.memory.sources == 0){
             let sources = creep.room.find(FIND_SOURCES);
@@ -22,13 +23,13 @@ module.exports = {
         */
         if (type == 'roomtaker') {
             //console.log('in controller roomtaker');
-            roleRoomTaker.run(creep, 'W2N4');
+            roleRoomTaker.run(creep, remoteRoom);
         } else if (type == 'remoteupgrader') {
-            roleRemoteUpgrader.run(creep, 'W2N4');
+            roleRemoteUpgrader.run(creep, remoteRoom);
         } else if (type == 'remotebuilder') {
             let buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
             creep.memory.buildTarget = buildTargets[0];
-            roleRemoteBuilder.run(creep, 'W2N4');
+            roleRemoteBuilder.run(creep, remoteRoom);
         } else if (type == 'harvester' || type == 'superharvester') {
             roleHarvester.run(creep);
         } else if (type == 'upgrader' || type == 'genric') {
@@ -46,7 +47,7 @@ module.exports = {
 
             if (numRepairs < 1 && numBuild > 0) {
                 creep.memory.buildTarget = buildTargets[0];
-                console.log('All building');
+                //console.log('All building');
                 roleBuilder.run(creep);
             } else if (type == 'builder' && numBuild > 0) {
                 creep.memory.buildTarget = buildTargets[0];
