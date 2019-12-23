@@ -3,31 +3,33 @@ let roomMem = require('misc.roomMem');
 let miscUtils = require('misc.constructionSites');
 let creepController = require('misc.creepController');
 let tempTest = require('misc.temp');
+let defenseTower = require('defense.tower');
 //require('misc.utils2');
 
 module.exports.loop = function() {
 
     //tempTest.run();
+    
 
     let wantedRooms = ['W2N5', 'W2N4', 'W1N4'];
     let homeRoom = 'W2N5';
 
     for (const i in Game.spawns) {
-        //console.log(Game.spawns[i].room);
-        //console.log(i);
-        const myCreeps = Game.spawns[i].room.find(FIND_MY_CREEPS);
-        //let myCreep = myCreeps[0];
-        //console.log('Creep 0 type', myCreep.memory.role);
-        //console.log(i);
-
-        if (Game.time % 10 == 2) {
-            /*
-            const TESTharvesters = Game.spawns[i].room.find(FIND_MY_CREEPS, {
-                filter: { memory.role: 'harvester' }
-            });
-            const TESTharvesters = myCreeps.filter(memory.role == 'harvester');
-            */
+        let thisRoom = Game.spawns[i].room.name;
+        
+        let hostiles = Game.rooms[thisRoom].find(FIND_HOSTILE_CREEPS).length;
+        if (hostiles > 0){
+            Game.spawns[i].room.memory.underAttack = true;
+        } else {
+            Game.spawns[i].room.memory.underAttack = false;
         }
+        
+        defenseTower.run(thisRoom);
+        
+        //const myCreeps = Game.spawns[i].room.find(FIND_MY_CREEPS);
+        //const roomSource = Game.spawns[i].room.Source;
+        //console.log(roomSource);
+        
         let harvesters = _.filter(Game.creeps, (creep) => (
             creep.memory.role == 'harvester' && creep.memory.spawner == i
         ));
@@ -61,21 +63,27 @@ module.exports.loop = function() {
 
         let minimumHarvesters = 1;
         let minimumUpgraders = 4;
-        let minimumBuilders = 2;
+        let minimumBuilders = 3;
         let minimumRepairers = 1;
         let minimumSuperHarvesters = 2;
 
         let maxRoomTakers = 1;
         let minimumRemoteUpgraders = 2;
         let minimumRemoteBuilders = 2;
-
-        if (Game.spawns[i].room.energyCapacityAvailable < 600) {
+    
+        if (Game.spawns[i].room.energyCapacityAvailable < 500) {
             minimumHarvesters = 1;
             minimumUpgraders = 2;
-            minimumBuilders = 1;
+            minimumBuilders = 3;
+            minimumRepairers = 0;
+            minimumSuperHarvesters = 0;
+        } else if (Game.spawns[i].room.energyCapacityAvailable < 600) {
+            minimumHarvesters = 2;
+            minimumUpgraders = 2;
+            minimumBuilders = 3;
             minimumRepairers = 1;
             minimumSuperHarvesters = 0;
-        }
+        } 
 
         /*
         if (Game.spawns[i].room.energyCapacityAvailable > 1500) {
@@ -105,7 +113,7 @@ module.exports.loop = function() {
             createCreep.run('remotebuilder', i);
         }
 
-        if (Game.time % 50 == 1) {
+        if (Game.time % 250 == 1) {
             console.log(Game.spawns[i].room);
             console.log(i + ' Harvesters: ' + harvesters.length + ' of ' + minimumHarvesters);
             console.log(i + ' Upgraders: ' + upgraders.length + ' of ' + minimumUpgraders);

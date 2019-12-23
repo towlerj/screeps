@@ -1,8 +1,6 @@
 let roleRemoteBuilder = {
-
     /** @param {Creep} creep **/
     run: function(creep, remoteRoom) {
-
         //console.log(claimroom);
         let inRoom = creep.room.name;
 

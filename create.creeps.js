@@ -40,7 +40,7 @@ let createCreep = {
                 'generic': [WORK, CARRY, CARRY, MOVE],
                 'roomtaker': [CLAIM, MOVE, MOVE, MOVE, MOVE],
                 'superharvester': [WORK, WORK, CARRY, MOVE],
-                'remoteupgrader': [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+                //'remoteupgrader': [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
                 //"longDistanceHarvester":[WORK,CARRY,CARRY,MOVE,MOVE]
             };
         }

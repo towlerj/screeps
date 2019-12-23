@@ -1,8 +1,6 @@
 let roleRemoteUpgrader = {
-
     /** @param {Creep} creep **/
     run: function(creep, remoteRoom) {
-
 
         creep.say('ru ' + remoteRoom);
         //console.log(claimroom);
