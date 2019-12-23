@@ -9,7 +9,7 @@
 
 /*
 USEFUL CODE
-    // show energy
+    // memory
     for(var name in Game.rooms) {
         console.log('Room "'+name+'" has '+Game.rooms[name].energyAvailable+' energy');
     }
@@ -20,20 +20,20 @@ USEFUL CODE
 
 
 module.exports = {
-    run: function() {
-
+    run: function(){
+        
         /*
         for (let s in Room.Source){
             console.log('Source: ' + s.energy);
         }
         */
-
+        
         const sources = Game.rooms['W2N5'].find[FIND_SOURCES];
         //console.log(sources[sources[0]);
-        for (s in sources) {
+        for (s in sources){
             console.log(s.pos);
         }
-
+        
         /*
         // SUICIDE Long Distnace Harvesters
         let longDistanceHarvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'longDistanceHarvester');

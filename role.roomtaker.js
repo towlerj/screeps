@@ -10,7 +10,7 @@
 module.exports = {
     run: function(creep,claimroom){
         creep.say('roomtaker' + claimroom);
-        console.log(claimroom);
+        //console.log(claimroom);
         let inRoom = creep.room.name;
         
         if (claimroom != creep.room.name){
