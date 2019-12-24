@@ -5,18 +5,18 @@ var roleUpgrader = require('role.upgrader');
 >>>>>>> f11448e9eee1c656b1d234e990c207b19bc4b2c5
 
 var roleBuilder = {
-
     /** @param {Creep} creep **/
     run: function(creep) {
-        
-        if(creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
+
+        if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.building = false;
             creep.say('harvest');
         }
-        if(!creep.memory.building && creep.store.getFreeCapacity() == 0) {
+        if (!creep.memory.building && creep.store.getFreeCapacity() == 0) {
             creep.memory.building = true;
             creep.say('build');
         }
+<<<<<<< HEAD
 
         if(creep.memory.building) {
 <<<<<<< HEAD
@@ -38,8 +38,17 @@ var roleBuilder = {
             roleUpgrader.run(creep);
             /*
 >>>>>>> f11448e9eee1c656b1d234e990c207b19bc4b2c5
+=======
+        creep.say('b');
+        if (creep.memory.building) {
+            if (creep.build(creep.memory.buildTarget) == ERR_NOT_IN_RANGE) {
+                //creep.moveTo(creep.memory.buildTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+                creep.moveTo(creep.memory.buildTarget);
+            }
+        } else {
+>>>>>>> PrototypeRework
             var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+            if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
                 //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                 creep.moveTo(sources[0]);
             }
