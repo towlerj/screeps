@@ -1,7 +1,6 @@
 let roleRepairer = require('role.repairer');
 
 var roleBuilder = {
-
     /** @param {Creep} creep **/
     run: function(creep) {
 
@@ -21,9 +20,11 @@ var roleBuilder = {
             }
         } else {
             var sources = creep.room.find(FIND_SOURCES);
-            if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+            // if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+            var useSource = creep.memory.sources;
+            if (creep.harvest(sources[useSource]) == ERR_NOT_IN_RANGE) {
                 //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                creep.moveTo(sources[0]);
+                creep.moveTo(sources[useSource]);
             }
         }
     }

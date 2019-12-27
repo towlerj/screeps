@@ -1,7 +1,7 @@
 let roleHarvester = {
-
     /** @param {Creep} creep **/
     run: function(creep) {
+
 
 
         if (creep.memory.role == 'superharvester') {
@@ -13,27 +13,43 @@ let roleHarvester = {
 
 
         if (creep.store.getFreeCapacity() > 0) {
+            /*
             let sources = creep.room.find(FIND_SOURCES);
-            if (creep.memory.type == 'harvester') {
+            if (sources.length >1 && creep.memory.type == 'harvester') {
                 var useSource = sources[1];
             } else {
                 var useSource = sources[0];
             }
+            */
+            var useSource = creep.memory.sources;
+            var sources = creep.room.find(FIND_SOURCES);
 
 
-            if (creep.harvest(useSource) == ERR_NOT_IN_RANGE) {
+            if (creep.harvest(sources[useSource]) == ERR_NOT_IN_RANGE) {
                 //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                creep.moveTo(useSource);
+                creep.moveTo(sources[useSource]);
             }
         } else {
-            let targets = creep.room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION ||
-                            structure.structureType == STRUCTURE_SPAWN ||
-                            structure.structureType == STRUCTURE_TOWER) &&
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                }
-            });
+            let targets;
+            // if under attack just supply towers
+            // this assumes skirmishes for now!
+            if (creep.room.memory.underattack) {
+                targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_TOWER) &&
+                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                    }
+                });
+            } else {
+                targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_EXTENSION ||
+                                structure.structureType == STRUCTURE_SPAWN ||
+                                structure.structureType == STRUCTURE_TOWER) &&
+                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                    }
+                });
+            }
             //creep.say(targets.length);
             if (targets.length > 0) {
                 if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {

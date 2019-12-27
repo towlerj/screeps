@@ -1,11 +1,9 @@
 let roleRemoteBuilder = {
-
     /** @param {Creep} creep **/
     run: function(creep, remoteRoom) {
-
         //console.log(claimroom);
         let inRoom = creep.room.name;
-
+        creep.say('rb');
         if (remoteRoom != creep.room.name) {
             creep.moveTo(Game.flags.Flag1);
         } else {
