@@ -22,20 +22,26 @@ module.exports = {
         if (hostileHealers.length > 0 && healerHit == false) {
             towers.forEach(tower => tower.attack(hostileHealers[0]));
             healerHit = true;
-            console.log("ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
+            if (Game.time % 50 == 1) {
+                console.log("ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
+            }
         }
         
         //if there are hostileAttackers - attack them    
         else if (hostileAttackers.length > 0) {
             towers.forEach(tower => tower.attack(hostileAttackers[0]));
             healerHit = false;
-            console.log("ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
+            if (Game.time % 50 == 1) {
+                console.log("ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
+            }
         }
         //if there are ANY Hostiles - attack them    
         else if (hostiles.length > 0) {
             towers.forEach(tower => tower.attack(hostiles[0]));
             healerHit = false;
-            console.log("ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
+            if (Game.time % 50 == 1) {
+                console.log("ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
+            }
         }
 
         //if there are no hostiles....
@@ -47,7 +53,7 @@ module.exports = {
                 var creep = Game.creeps[name];
                 if (creep.hits < creep.hitsMax) {
                     towers.forEach(tower => tower.heal(creep));
-                    console.log("Tower is healing Creeps.");
+                    //console.log("Tower is healing Creeps.");
                 }
             }
 

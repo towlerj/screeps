@@ -12,17 +12,10 @@ module.exports = {
         let type = creep.memory.role;
         let room = creep.room;
         //let remoteRoom = 'W2N4';
-        let remoteRoom = 'W1N4';
-        /*
-        //if (creep.memory.sources == 0){
-            let sources = creep.room.find(FIND_SOURCES);
-            let useSource = sources[Game.time % 2];
-            //creep.memory.sources = 0;
-            creep.memory.sources = useSource.pos;
-        //}
-        */
+        //let remoteRoom = 'W1N4';
+        let remoteRoom = 'W3N4';
+
         if (type == 'roomtaker') {
-            //console.log('in controller roomtaker');
             roleRoomTaker.run(creep, remoteRoom);
         } else if (type == 'remoteupgrader') {
             roleRemoteUpgrader.run(creep, remoteRoom);
@@ -31,6 +24,7 @@ module.exports = {
             creep.memory.buildTarget = buildTargets[0];
             roleRemoteBuilder.run(creep, remoteRoom);
         } else if (type == 'harvester' || type == 'superharvester') {
+            //console.log(creep.room.name + ' harvesting')
             roleHarvester.run(creep);
         } else if (type == 'upgrader' || type == 'genric') {
             roleUpgrader.run(creep);
@@ -41,34 +35,25 @@ module.exports = {
 
             repairTargets.sort((a, b) => a.hits - b.hits);
             const buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
+            const closestBuildTarget = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+            //console.log(closestBuildTarget);
+            creep.memory.buildTarget = closestBuildTarget;
 
             let numBuild = buildTargets.length;
             let numRepairs = repairTargets.length;
 
             if (numRepairs < 1 && numBuild > 0) {
-                creep.memory.buildTarget = buildTargets[0];
-                //console.log('All building');
                 roleBuilder.run(creep);
             } else if (type == 'builder' && numBuild > 0) {
-                creep.memory.buildTarget = buildTargets[0];
                 roleBuilder.run(creep);
             } else if (creep.room.energyAvailable < 100) {
-                //console.log('We need eneeeergy');
                 roleHarvester.run(creep);
             } else if (numBuild > 0 && type == 'builder') {
-                //console.log('Builder to upgrader - <50 repairs');
-                creep.memory.buildTarget = buildTargets[0];
                 roleBuilder.run(creep);
             } else if (numRepairs > 0) {
                 creep.memory.repairTarget = repairTargets[0];
                 roleRepairer.run(creep);
             } else {
-                /*
-                if (Game.time % 50 == 3) {
-                    console.log('Unknown type being sent to upgrade ' + type + '_ ' + creep.name + '_' + creep.room + '_' + numRepairs);
-                }
-                creep.say('ME');
-                */
                 roleUpgrader.run(creep);
             }
 

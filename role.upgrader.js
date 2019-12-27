@@ -2,7 +2,7 @@ let roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        //creep.say('u');
+        creep.say('u');
         if (creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.upgrading = false;
             creep.say('harvest');
@@ -20,12 +20,14 @@ let roleUpgrader = {
             }
         } else {
 
-            let sources = creep.room.find(FIND_SOURCES);
+            //let sources = creep.room.find(FIND_SOURCES);
+            var useSource = creep.memory.sources;
+            var sources = creep.room.find(FIND_SOURCES);
 
-            if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+
+            if (creep.harvest(sources[useSource]) == ERR_NOT_IN_RANGE) {
                 //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                //creep.say("here");
-                creep.moveTo(sources[0]);
+                creep.moveTo(sources[useSource]);
             }
         }
     }
