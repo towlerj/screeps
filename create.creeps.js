@@ -1,3 +1,5 @@
+require('prototype.spawn')();
+
 const types = ["builder", "harvester", "repairer", "upgrader", "roomtaker", 'superharvester', 'remoteupgrader', "remotebuilder"];
 
 // 'upgrader': [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
@@ -9,22 +11,45 @@ let createCreep = {
 
     run: function(creepType, spawnName) {
         let maxEnergy = Game.spawns[spawnName].room.energyCapacityAvailable;
-        const useNew = false;
+        let useNew = false;
+        useNew = true;
         //console.log('in spawn');
+        if (maxEnergy < 1500){
+            maxEnergy = Math.min(maxEnergy,1000);
+        }
         if (useNew) {
+            if (maxEnergy < 600 && creepType == 'superharvester') {
+                creepType = 'harvester';
+            }
+            let useEnergy;
+            if (creepType == 'harvester') {
+                useEnergy = 300;
+            } 
+            /*else if (creepType == 'superharvester'){
+                useEnergy = Math.min(1200, maxEnergy-200);
+            } */ 
+            else {
+                useEnergy = Math.max(300,Math.min(1000,maxEnergy-200));
+            }
+            //console.log('Use energy ' + useEnergy + ' of ' + maxEnergy + ' for ' + Game.spawns[spawnName].room.name);
+            useEnergy = Math.min(useEnergy,1000);
+            Game.spawns[spawnName].createCustomCreep(useEnergy, creepType);
 
         } else {
             sList = Game.spawns[spawnName].room.find(FIND_SOURCES)
 
             const sNumber = Math.floor(Math.random() * sList.length)
             const srcName = sList[sNumber].id;
+            srcName = Game.spawns[spawnName].room.memory.useSources[0];
+            const retName = Game.spawns[spawnName].room.memory.useSources.shift;
+            Game.spawns[spawnName].room.memory.useSources.push(retName);
             //console.log('srcName ' + srcName);
 
-            Math.floor(Math.random() * 2)
+            
             let bodies = {
                 'harvester': [WORK, WORK, CARRY, MOVE],
                 'repairer': [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
-                'upgrader': [WORK, CARRY, CARRY, MOVE, MOVE],
+                'upgrader': [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
                 'builder': [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
                 'remotebuilder': [WORK, CARRY, CARRY, MOVE, MOVE],
                 'remoteupgrader': [WORK, CARRY, CARRY, MOVE, MOVE],
@@ -34,7 +59,7 @@ let createCreep = {
                 //"longDistanceHarvester":[WORK,CARRY,CARRY,MOVE,MOVE]
             };
 
-            if (maxEnergy < 1000) {
+            if (maxEnergy < 700) {
                 bodies = {
                     'harvester': [WORK, WORK, CARRY, MOVE],
                     'repairer': [WORK, WORK, CARRY, MOVE],

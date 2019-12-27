@@ -22,14 +22,9 @@ let roleHarvester = {
                 creep.memory.sourceID = sources[useSource].id;
             }
             mySource = Game.getObjectById(creep.memory.sourceID);
-            /*
-            if (creep.harvest(sources[useSource]) == ERR_NOT_IN_RANGE) {
-                creep.say('h ' + useSource);
-                creep.moveTo(sources[useSource]);
-            }
-            */
+
             if (creep.harvest(mySource) == ERR_NOT_IN_RANGE) {
-                creep.say('h ' + mySource.id);
+                //creep.say('h ' + mySource.id);
                 creep.moveTo(mySource);
             }
         } else {
@@ -59,6 +54,7 @@ let roleHarvester = {
                             structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
                     }
                 });
+
             }
             //creep.say(targets.length);
             if (targets.length > 0) {

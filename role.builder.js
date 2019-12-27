@@ -1,4 +1,5 @@
-let roleRepairer = require('role.repairer');
+//let roleRepairer = require('role.repairer');
+let roleUpgrader = require('role.upgrader');
 
 var roleBuilder = {
     /** @param {Creep} creep **/
@@ -14,23 +15,31 @@ var roleBuilder = {
             creep.say('build');
         }
         creep.say('b');
+        let buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
+
         if (creep.memory.building) {
-            const buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
+            
+            //if (buildTargets.length < 1){
+            //    roleRepairer.run(creep);
+            //}
+            
             const closestBuildTarget = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
             creep.memory.buildTarget = closestBuildTarget;
             if (creep.build(creep.memory.buildTarget) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.memory.buildTarget);
             }
         } else {
-            
             var mySource;
+            var sources = creep.room.find(FIND_SOURCES);
             if (!creep.memory.sourceID) {
                 var useSource = creep.memory.sources;
-                var sources = creep.room.find(FIND_SOURCES);
+                //var sources = creep.room.find(FIND_SOURCES);
                 creep.memory.sourceID = sources[useSource].id;
             }
             mySource = Game.getObjectById(creep.memory.sourceID);
-            if (creep.harvest(mySource) == ERR_NOT_IN_RANGE) {
+            if (sources.length < 1){
+                roleUpgrader.run(creep);
+            } else if (creep.harvest(mySource) == ERR_NOT_IN_RANGE) {
                 //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                 creep.moveTo(mySource);
             }

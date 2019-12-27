@@ -9,11 +9,16 @@ const roleRemoteBuilder = require('role.remoteBuilder');
 
 module.exports = {
     run: function(creep) {
+        if (!creep.memory.role){
+            creep.memory.role = creep.memory.type;
+        }
         let type = creep.memory.role;
         let room = creep.room;
         //let remoteRoom = 'W2N4';
         //let remoteRoom = 'W1N4';
         let remoteRoom = 'W3N4';
+
+
 
         if (type == 'roomtaker') {
             roleRoomTaker.run(creep, remoteRoom);
@@ -33,14 +38,15 @@ module.exports = {
                 filter: object => object.hits < object.hitsMax
             });
 
-            repairTargets.sort((a, b) => a.hits - b.hits);
+
             const buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
             const closestBuildTarget = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
-            //console.log(closestBuildTarget);
             creep.memory.buildTarget = closestBuildTarget;
 
             let numBuild = buildTargets.length;
             let numRepairs = repairTargets.length;
+            repairTargets.sort((a, b) => a.hits - b.hits);
+            creep.memory.repairTarget = repairTargets[0];
 
             if (numRepairs < 1 && numBuild > 0) {
                 roleBuilder.run(creep);
@@ -50,8 +56,10 @@ module.exports = {
                 roleHarvester.run(creep);
             } else if (numBuild > 0 && type == 'builder') {
                 roleBuilder.run(creep);
+            } else if (numBuild > 5){
+                //console.log('BUILD ' + creep.room.name);
+                roleBuilder.run(creep);
             } else if (numRepairs > 0) {
-                creep.memory.repairTarget = repairTargets[0];
                 roleRepairer.run(creep);
             } else {
                 roleUpgrader.run(creep);
