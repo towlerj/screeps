@@ -1,4 +1,6 @@
-let roleRepairer = require('role.repairer');
+//let roleRepairer = require('role.repairer');
+let roleUpgrader = require('role.upgrader');
+let getSource = require('misc.sources');
 
 var roleBuilder = {
     /** @param {Creep} creep **/
@@ -7,25 +9,42 @@ var roleBuilder = {
         if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.building = false;
             creep.say('harvest');
+
         }
         if (!creep.memory.building && creep.store.getFreeCapacity() == 0) {
             creep.memory.building = true;
             creep.say('build');
         }
-        creep.say('b');
+
+        let buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
+
         if (creep.memory.building) {
+            creep.say('b');
+            //if (buildTargets.length < 1){
+            //    roleRepairer.run(creep);
+            //}
+
+            const closestBuildTarget = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+            creep.memory.buildTarget = closestBuildTarget;
             if (creep.build(creep.memory.buildTarget) == ERR_NOT_IN_RANGE) {
-                //creep.moveTo(creep.memory.buildTarget, {visualizePathStyle: {stroke: '#ffffff'}});
                 creep.moveTo(creep.memory.buildTarget);
             }
         } else {
+            creep.say('b_h');
+            getSource.run(creep);
+            /*
+            var mySource;
             var sources = creep.room.find(FIND_SOURCES);
-            // if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-            var useSource = creep.memory.sources;
-            if (creep.harvest(sources[useSource]) == ERR_NOT_IN_RANGE) {
-                //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                creep.moveTo(sources[useSource]);
+            if (!creep.memory.sourceID) {
+                var useSource = creep.memory.sources;
+                creep.memory.sourceID = sources[useSource].id;
             }
+            mySource = Game.getObjectById(creep.memory.sourceID);
+            if (creep.harvest(mySource) == ERR_NOT_IN_RANGE) {
+                //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                creep.moveTo(mySource);
+            }
+            */
         }
     }
 };

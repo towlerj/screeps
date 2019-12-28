@@ -15,11 +15,34 @@ module.exports = {
         }
         */
 
+        /*
         const sources = Game.rooms['W2N5'].find[FIND_SOURCES];
-        //console.log(sources[sources[0]);
         for (s in sources) {
             console.log(s.pos);
         }
+        */
+        /*
+        var repairit = creep.room.find(FIND_STRUCTURES, { 
+                filter: (structure) => { 
+                    return ((structure.hits < 5000) && (structure.hits > 0))
+            }
+        });
+        */
+
+        const locExtensions = Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == 'extension' && structure.energy > 0)
+            }
+        });
+        //console.log('extensions length: ' + locExtensions.length);
+        for (let x = 0; x < locExtensions.length; x++) {
+            //console.log(locExtensions[x].id + ' _ ' + locExtensions[x].structureType + " _ " + locExtensions[x].energy);
+        }
+        /*
+        for (const struc in strucs) {
+            console.log(struc);
+        }
+        */
 
         /*
         // SUICIDE Long Distnace Harvesters

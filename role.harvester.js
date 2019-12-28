@@ -1,3 +1,6 @@
+var roleUpgrader = require('role.upgrader');
+let getSource = require('misc.sources');
+
 let roleHarvester = {
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -12,35 +15,20 @@ let roleHarvester = {
         }
 
 
+
+
         if (creep.store.getFreeCapacity() > 0) {
-            /*
-            let sources = creep.room.find(FIND_SOURCES);
-            if (sources.length >1 && creep.memory.type == 'harvester') {
-                var useSource = sources[1];
-            } else {
-                var useSource = sources[0];
-            }
-            */
-            var useSource = creep.memory.sources;
-            var sources = creep.room.find(FIND_SOURCES);
-
-
-            if (creep.harvest(sources[useSource]) == ERR_NOT_IN_RANGE) {
-                //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                creep.moveTo(sources[useSource]);
-            }
+            getSource.run(creep);
         } else {
-            let targets;
-            // if under attack just supply towers
-            // this assumes skirmishes for now!
-            if (creep.room.memory.underattack) {
-                targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_TOWER) &&
-                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                    }
-                });
-            } else {
+            let targets = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_TOWER) &&
+                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                }
+            });
+            if (targets.length == 0) {
+
+                //let targets;
                 targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_EXTENSION ||
@@ -50,12 +38,16 @@ let roleHarvester = {
                     }
                 });
             }
-            //creep.say(targets.length);
             if (targets.length > 0) {
-                if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                let myTarget = creep.pos.findClosestByRange(targets);
+                //myTarget = targets[0];
+                creep.say('g ' + myTarget.id);
+                if (creep.transfer(myTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     //creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
-                    creep.moveTo(targets[0]);
+                    creep.moveTo(myTarget);
                 }
+            } else {
+                roleUpgrader.run(creep);
             }
         }
     }
