@@ -6,6 +6,7 @@ const roleRoomTaker = require('role.roomtaker');
 const roleLongDistHarvester = require('role.longdistanceharvester');
 const roleRemoteUpgrader = require('role.remoteUpgrader');
 const roleRemoteBuilder = require('role.remoteBuilder');
+const roomTasks = require('room.taskQueue');
 
 module.exports = {
     run: function(creep) {
@@ -17,7 +18,7 @@ module.exports = {
         //let remoteRoom = 'W2N4';
         //let remoteRoom = 'W1N4';
         let remoteRoom = 'W3N4';
-
+        const useTaskList = false;
 
 
         if (type == 'roomtaker') {
@@ -31,7 +32,43 @@ module.exports = {
         } else if (type == 'harvester' || type == 'superharvester') {
             //console.log(creep.room.name + ' harvesting')
             roleHarvester.run(creep);
-        } else if (type == 'upgrader' || type == 'genric') {
+        } else if (useTaskList){
+            // need to fix the task list, so the creeps don't swithc role every tick
+            let taskList = creep.room.memory.tasklist;
+            if (taskList.length < 1){
+                roomTasks.run(creep.room.name);
+                taskList = creep.room.memory.tasklist;
+            }
+            const nextTask = creep.room.memory.tasklist.shift();
+            
+            switch (nextTask){
+                case 'harvest':
+                    roleHarvester.run(creep);
+                    break;
+                case 'upgrade':
+                    roleUpgrader.run(creep);
+                    break
+                case 'build':    
+                    const buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
+                    const closestBuildTarget = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+                    creep.memory.buildTarget = closestBuildTarget;
+        
+                    roleBuilder.run(creep);
+                    break;
+                case 'repair':
+                    const repairTargets = creep.room.find(FIND_STRUCTURES, {
+                        filter: object => object.hits < object.hitsMax
+                    });
+                    repairTargets.sort((a, b) => a.hits - b.hits);
+                    creep.memory.repairTarget = repairTargets[0];
+                    roleRepairer.run(creep);
+                    break;
+                default:
+                    roleUpgrader.run(creep);
+                    break;
+                }
+        } 
+        else if (type == 'upgrader' || type == 'genric') {
             roleUpgrader.run(creep);
         } else {
             const repairTargets = creep.room.find(FIND_STRUCTURES, {
@@ -66,6 +103,7 @@ module.exports = {
             }
 
         }
+        
     }
 
 };

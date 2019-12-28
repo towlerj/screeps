@@ -23,7 +23,7 @@ module.exports = {
             towers.forEach(tower => tower.attack(hostileHealers[0]));
             healerHit = true;
             if (Game.time % 50 == 1) {
-                console.log("ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
+                console.log(myRoomName + " ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
             }
         }
         
@@ -31,16 +31,16 @@ module.exports = {
         else if (hostileAttackers.length > 0) {
             towers.forEach(tower => tower.attack(hostileAttackers[0]));
             healerHit = false;
-            if (Game.time % 50 == 1) {
-                console.log("ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
+            if (Game.time % 23 == 1) {
+                console.log(myRoomName + " ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
             }
         }
         //if there are ANY Hostiles - attack them    
         else if (hostiles.length > 0) {
             towers.forEach(tower => tower.attack(hostiles[0]));
             healerHit = false;
-            if (Game.time % 50 == 1) {
-                console.log("ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
+            if (Game.time % 23 == 1) {
+                console.log(myRoomName + " ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
             }
         }
 

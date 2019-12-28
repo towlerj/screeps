@@ -7,6 +7,7 @@ let tempTest = require('misc.temp');
 let defenseTower = require('defense.tower');
 //require('misc.utils2');
 let roomFuncs = require('misc.roomFuncs');
+let roomTasks = require('room.taskQueue');
 
 module.exports.loop = function() {
 
@@ -21,8 +22,10 @@ module.exports.loop = function() {
     let homeRoom = 'W2N5';
     // W3N4
     for (const i in Game.spawns) {
+
         let thisRoom = Game.spawns[i].room.name;
-        
+        roomTasks.run(thisRoom);
+
         if (!Game.rooms[thisRoom].memory.useSources){
             console.log('Gettign sources');
             const roomSources = [];

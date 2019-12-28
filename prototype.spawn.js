@@ -22,8 +22,8 @@ module.exports = function() {
             const srcName = sList[sNumber].id;
 
             // energy based body parts
-            //var noParts = Math.min(4,Math.floor(energy / 200));
-            var noParts = Math.floor(energy / 200);
+            var noParts = Math.min(4,Math.floor(energy / 200));
+            //var noParts = Math.floor(energy / 200);
             var body = [];
             for (let i = 0; i < noParts; i++) {
                 body.push(WORK);
