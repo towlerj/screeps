@@ -29,15 +29,14 @@ module.exports = {
         });
         */
 
-        const locExtensions = Game.spawns['Spawn3'].room.find(FIND_STRUCTURES, {
+        const locExtensions = Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == 'extension' && structure.energy > 0)
             }
         });
-        console.log('strucs length: ' + locExtensions.length);
+        //console.log('extensions length: ' + locExtensions.length);
         for (let x = 0; x < locExtensions.length; x++) {
-            //console.log(locExtensions[x].structureType + " _ " + locExtensions[x].energy);
-            console.log(locExtensions[x].id + ' _ ' + locExtensions[x].structureType + " _ " + locExtensions[x].energy);
+            //console.log(locExtensions[x].id + ' _ ' + locExtensions[x].structureType + " _ " + locExtensions[x].energy);
         }
         /*
         for (const struc in strucs) {

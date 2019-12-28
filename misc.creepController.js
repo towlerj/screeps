@@ -7,10 +7,12 @@ const roleLongDistHarvester = require('role.longdistanceharvester');
 const roleRemoteUpgrader = require('role.remoteUpgrader');
 const roleRemoteBuilder = require('role.remoteBuilder');
 const roomTasks = require('room.taskQueue');
+const roleContainerMiner = require('role.miner');
+const roleEnergyTransfer = require('role.energytransfer');
 
 module.exports = {
     run: function(creep) {
-        if (!creep.memory.role){
+        if (!creep.memory.role) {
             creep.memory.role = creep.memory.type;
         }
         let type = creep.memory.role;
@@ -29,30 +31,32 @@ module.exports = {
             let buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
             creep.memory.buildTarget = buildTargets[0];
             roleRemoteBuilder.run(creep, remoteRoom);
+        } else if (type == 'containerminer') {
+            roleContainerMiner.run(creep);
         } else if (type == 'harvester' || type == 'superharvester') {
             //console.log(creep.room.name + ' harvesting')
             roleHarvester.run(creep);
-        } else if (useTaskList){
+        } else if (useTaskList) {
             // need to fix the task list, so the creeps don't swithc role every tick
             let taskList = creep.room.memory.tasklist;
-            if (taskList.length < 1){
+            if (taskList.length < 1) {
                 roomTasks.run(creep.room.name);
                 taskList = creep.room.memory.tasklist;
             }
             const nextTask = creep.room.memory.tasklist.shift();
-            
-            switch (nextTask){
+
+            switch (nextTask) {
                 case 'harvest':
                     roleHarvester.run(creep);
                     break;
                 case 'upgrade':
                     roleUpgrader.run(creep);
                     break
-                case 'build':    
+                case 'build':
                     const buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
                     const closestBuildTarget = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
                     creep.memory.buildTarget = closestBuildTarget;
-        
+
                     roleBuilder.run(creep);
                     break;
                 case 'repair':
@@ -66,10 +70,11 @@ module.exports = {
                 default:
                     roleUpgrader.run(creep);
                     break;
-                }
-        } 
-        else if (type == 'upgrader' || type == 'genric') {
+            }
+        } else if (type == 'upgrader' || type == 'genric') {
             roleUpgrader.run(creep);
+        } else if (type == 'energytransfer') {
+            roleEnergyTransfer.run(creep);
         } else {
             const repairTargets = creep.room.find(FIND_STRUCTURES, {
                 filter: object => object.hits < object.hitsMax
@@ -93,7 +98,7 @@ module.exports = {
                 roleHarvester.run(creep);
             } else if (numBuild > 0 && type == 'builder') {
                 roleBuilder.run(creep);
-            } else if (numBuild > 5){
+            } else if (numBuild > 5) {
                 //console.log('BUILD ' + creep.room.name);
                 roleBuilder.run(creep);
             } else if (numRepairs > 0) {
@@ -103,7 +108,7 @@ module.exports = {
             }
 
         }
-        
+
     }
 
 };

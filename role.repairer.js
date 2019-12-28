@@ -1,4 +1,5 @@
 //let roleBuilder = require('role.builder');
+let getSource = require('misc.sources');
 
 
 let roleRepairer = {
@@ -22,6 +23,8 @@ let roleRepairer = {
                 creep.say('r '); // + creep.memory.repairTarget.id);
             }
         } else {
+            getSource.run(creep);
+            /*
             var mySource;
             if (!creep.memory.sourceID) {
                 var useSource = creep.memory.sources;
@@ -33,6 +36,7 @@ let roleRepairer = {
                 //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                 creep.moveTo(mySource);
             } 
+            */
         }
     }
 }

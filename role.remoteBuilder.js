@@ -1,3 +1,5 @@
+let getSource = require('misc.sources');
+
 let roleRemoteBuilder = {
     /** @param {Creep} creep **/
     run: function(creep, remoteRoom) {
@@ -25,7 +27,8 @@ let roleRemoteBuilder = {
                     creep.moveTo(creep.memory.buildTarget);
                 }
             } else {
-
+                getSource.run(creep);
+                /*
                 var sources = creep.room.find(FIND_SOURCES);
                 let sID = Game.time % 2;
                 if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
@@ -33,6 +36,7 @@ let roleRemoteBuilder = {
 
                     creep.moveTo(sources[1]);
                 }
+                */
             }
         }
     }

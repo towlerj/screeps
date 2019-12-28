@@ -1,3 +1,5 @@
+let getSource = require('misc.sources');
+
 let roleUpgrader = {
 
     /** @param {Creep} creep **/
@@ -12,23 +14,31 @@ let roleUpgrader = {
             creep.say('upgrade');
         }
 
+
+
         if (creep.memory.upgrading) {
-            //creep.say("here");
             if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                //creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
                 creep.moveTo(creep.room.controller);
             }
         } else {
+            getSource.run(creep);
+            /*
+            let mySource = getSource.run(creep);
+            if (!mySource) {
+                let mySource = Game.getObjectById(creep.memory.sourceID);
+                if (creep.harvest(mySource) == ERR_NOT_IN_RANGE) {
+                    //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                    creep.moveTo(mySource);
+                }
+            } else {
 
-            //let sources = creep.room.find(FIND_SOURCES);
-            var useSource = creep.memory.sources;
-            var sources = creep.room.find(FIND_SOURCES);
-
-
-            if (creep.harvest(sources[useSource]) == ERR_NOT_IN_RANGE) {
-                //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                creep.moveTo(sources[useSource]);
+                creep.say('u moving');
+                if (creep.withdraw(mySource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                    creep.moveTo(mySource);
+                }
             }
+            */
         }
     }
 };
