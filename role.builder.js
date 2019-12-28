@@ -14,11 +14,11 @@ var roleBuilder = {
             creep.memory.building = true;
             creep.say('build');
         }
-        creep.say('b');
+        
         let buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
 
         if (creep.memory.building) {
-            
+            creep.say('b');    
             //if (buildTargets.length < 1){
             //    roleRepairer.run(creep);
             //}
@@ -29,17 +29,15 @@ var roleBuilder = {
                 creep.moveTo(creep.memory.buildTarget);
             }
         } else {
+            creep.say('b_h');
             var mySource;
             var sources = creep.room.find(FIND_SOURCES);
             if (!creep.memory.sourceID) {
                 var useSource = creep.memory.sources;
-                //var sources = creep.room.find(FIND_SOURCES);
                 creep.memory.sourceID = sources[useSource].id;
             }
             mySource = Game.getObjectById(creep.memory.sourceID);
-            if (sources.length < 1){
-                roleUpgrader.run(creep);
-            } else if (creep.harvest(mySource) == ERR_NOT_IN_RANGE) {
+            if (creep.harvest(mySource) == ERR_NOT_IN_RANGE) {
                 //creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                 creep.moveTo(mySource);
             }
