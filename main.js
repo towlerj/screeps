@@ -12,26 +12,37 @@ let roomTasks = require('room.taskQueue');
 module.exports.loop = function() {
 
 
-    if (Game.time % 51 == 1) {
-        //tempTest.run();
-        roomFuncs.run();
-    }
-    let spawnTrigger = undefined;
 
     let wantedRooms = ['W2N5', 'W2N4', 'W1N4', 'W3N4'];
     let homeRoom = 'W2N5';
     // W3N4
     for (const i in Game.spawns) {
+        let spawnTrigger = undefined;
 
         if (i == 'Spawn1') {
             if (Game.time % 23 == 1) {
                 tempTest.run();
+                //roomFuncs.run()
             }
         }
 
         let thisSpawn = Game.spawns[i];
         let thisRoom = thisSpawn.room;
         let roomCreeps = thisRoom.find(FIND_MY_CREEPS);
+        thisRoom.memory.roomcreeps = roomCreeps.length;
+        if (roomCreeps.length == 0){
+            console.log(10);
+            spawnTrigger = createCreep.run('harvester', i);
+        }
+        /*
+        if (Game.time % 51 == 1) {
+            //tempTest.run();
+            console.log("About to go to " + thisRoom.name + ' funcs');
+            roomFuncs.run(thisRoom.name);
+        }
+        */
+    
+
         /*
         for (let c in roomCreeps) {
             console.log(c.name);
@@ -75,6 +86,10 @@ module.exports.loop = function() {
         let harvesters = _.filter(Game.creeps, (creep) => (
             creep.memory.role == 'harvester' && creep.memory.spawner == i
         ));
+        
+        let remoteharvesters = _.filter(Game.creeps, (creep) => (
+            creep.memory.role == 'remoteharvester' && creep.memory.spawner == i
+        ));
 
         //let harvesters = _.sum(roomCreeps, (c) => c.memory.role == 'harvester');
 
@@ -114,6 +129,7 @@ module.exports.loop = function() {
         let maxRoomTakers = 1;
         let minimumRemoteUpgraders = 1;
         let minimumRemoteBuilders = 2;
+        let minimumRemoteHarvesters = 0;
 
         if (thisRoom.energyCapacityAvailable < 500) {
             minimumHarvesters = 1;
@@ -131,6 +147,15 @@ module.exports.loop = function() {
             minimumRemoteUpgraders = 1;
             minimumRemoteBuilders = 1;
             minimumSuperHarvesters = 0;
+        } else if (thisRoom.energyCapacityAvailable > 10000) {
+            minimumHarvesters = 0;
+            minimumUpgraders = 1;
+            minimumBuilders = 1;
+            minimumRepairers = 1;
+            minimumSuperHarvesters = 1;
+            minimumRemoteUpgraders = 1;
+            minimumRemoteBuilders = 1;
+            minimumRemoteTakers = 1;
         } else if (thisRoom.energyCapacityAvailable > 2000) {
             minimumHarvesters = 0;
             minimumUpgraders = 2;
@@ -142,7 +167,11 @@ module.exports.loop = function() {
             minimumRemoteTakers = 1;
 
         }
-
+        /*
+        if (thisRoom.name == 'W2N4'){
+            minimumRemoteHarvesters = 1;
+        }
+        */
         if (thisRoom.controller.level == 8) {
             minimumUpgraders = Math.min(minimumUpgraders, 1);
         }
@@ -189,6 +218,7 @@ module.exports.loop = function() {
                 // if there is a container next to the source
                 if (containers.length > 0) {
                     // spawn a miner
+                    console.log(thisRoom.name + ' needs a miner');
                     spawnTrigger = thisSpawn.createContainerMiner(iSrc.id);
                     break;
                 }
@@ -196,13 +226,16 @@ module.exports.loop = function() {
         }
 
 
-        if (Game.time % 51 == 1) {
+        if (Game.time % 181 == 1) {
             const allCreeps = _.filter(Game.creeps, (creep) => (
                 creep.memory.spawner == i
             ));
             console.log(thisRoom.name);
             console.log(i + ' All: ' + allCreeps.length);
             console.log(i + ' Harvesters: ' + harvesters.length + ' of ' + minimumHarvesters);
+            if (minimumRemoteHarvesters > 0){
+                console.log(i + ' Remote Harvesters: ' + remoteharvesters.length + ' of ' + minimumRemoteHarvesters);
+            }
             console.log(i + ' Upgraders: ' + upgraders.length + ' of ' + minimumUpgraders);
             console.log(i + ' Builders: ' + builders.length + ' of ' + minimumBuilders);
             console.log(i + ' Repairers: ' + repairers.length + ' of ' + minimumRepairers);
@@ -231,16 +264,26 @@ module.exports.loop = function() {
 
         if (!spawnTrigger) {
             if (energytransfers.length < minimumEnergyTransfer) {
-                spawnTrigger = thisSpawn.createEnergyTransfer(600);
+                //console.log(thisRoom.name + ' ' + 1);
+                if (energytransfers.length == 0){
+                    spawnTrigger = thisSpawn.createEnergyTransfer(300);
+                } else {
+                   spawnTrigger = thisSpawn.createEnergyTransfer(600);
+                }
             } else if (harvesters.length < minimumHarvesters && superharvesters.length == 0) {
+                //console.log(2);
                 spawnTrigger = createCreep.run('harvester', i);
             } else if (harvesters.length == 0 && superharvesters.length == 0 && containerminers == 0) {
+                //console.log(3);
                 spawnTrigger = createCreep.run('superharvester', i);
             } else if (roomtakers.length < maxRoomTakers && takeRoom) {
-                //console.log('create roomtaker');
+                //console.log(4);
                 spawnTrigger = createCreep.run('roomtaker', i);
-            } else if (builders.length < minimumBuilders && builders.length == 0) {
-                spawnTrigger = spawnTrigger = createCreep.run('builder', i);
+            } /** else if (remoteharvesters.length < minimumRemoteHarvesters) {
+                spawnTrigger = thisSpawn.createRemoteHarvester(thisRoom.energyAvailable,'W2N3');
+            } */ else if (builders.length < minimumBuilders && builders.length == 0) {
+                //console.log(1);
+                spawnTrigger = createCreep.run('builder', i);
             } else if (upgraders.length < minimumUpgraders) {
                 spawnTrigger = createCreep.run('upgrader', i);
             } else if (superharvesters.length < minimumSuperHarvesters && superharvesters.length == 0) {

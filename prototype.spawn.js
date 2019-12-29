@@ -10,6 +10,7 @@
 module.exports = function() {
     StructureSpawn.prototype.createCustomCreep =
         function(energy, roleName) {
+        //console.log(this.name + " " + roleName + " spawning");
             // let's create a name
             let newName = this.name + '_' + roleName + '_' + Game.time;
             let energyAvailable = this.room.energyAvailable;
@@ -24,7 +25,7 @@ module.exports = function() {
 
             // energy based body parts
             var noParts = Math.floor(energy / 200);
-
+            noParts = Math.min(15,noParts);
             var body = [];
             for (let i = 0; i < noParts; i++) {
                 body.push(WORK);
@@ -36,14 +37,48 @@ module.exports = function() {
                 body.push(MOVE);
             }
 
-            return this.createCreep(body, newName, { role: roleName, sources: sNumber, sourceID: srcName, spawner: this.name });
+            return this.createCreep(body, newName, { role: roleName, sources: sNumber, sourceID: srcName, spawner: this.name,bodyParts:body });
         };
+    StructureSpawn.prototype.createRemoteHarvester =
+        function(energy, roomName) {
+            // let's create a name
+            let newName = this.name + '_remoteharvester_' + Game.time;
+            let energyAvailable = this.room.energyAvailable;
+            // and get a default energy source
+            
+            
+            
+            if (energyAvailable < 1000) {
+                energy = Math.min(energy, 400);
+            }
+            // energy based body parts
+            var noParts = Math.floor(energy / 200);
+            noParts = Math.min(15,noParts);
+            var body = [];
+            for (let i = 0; i < noParts; i++) {
+                body.push(WORK);
+            }
+            for (let i = 0; i < noParts; i++) {
+                body.push(CARRY);
+            }
+            for (let i = 0; i < noParts; i++) {
+                body.push(MOVE);
+            }
+
+            return this.createCreep(body, newName, { role: 'remoteharvester', remoteroom: roomName, spawner: this.name,bodyParts:body });
+        };
+
     StructureSpawn.prototype.createContainerMiner =
         function(mineSourceID) {
             //console.log('CreateContainerMiner');
             let newName = this.name + '_containerminer_' + Game.time;
-            return this.createCreep([WORK, WORK, WORK, WORK, WORK, MOVE], newName, { role: 'containerminer', sourceID: mineSourceID, spawner: this.name });
+            if (this.room.energyAvailable>=600){
+                return this.createCreep([WORK, WORK, WORK, WORK, WORK, CARRY, MOVE], newName, { role: 'containerminer', sourceID: mineSourceID,small:1, spawner: this.name });
+            } else {
+                return this.createCreep([WORK, WORK, WORK, CARRY, MOVE], newName, { role: 'containerminer', sourceID: mineSourceID,small:0, spawner: this.name });
+            }
         };
+
     StructureSpawn.prototype.createEnergyTransfer =
         function(energy) {
             // more move than carry, no work

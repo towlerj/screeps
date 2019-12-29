@@ -19,7 +19,7 @@ var miscSources = {
         } else {
             const locExtensions = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.structureType == 'extension' && structure.energy > 0)
+                    return ((structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_STORAGE)  && structure.store[RESOURCE_ENERGY] > 0)
                 }
             });
             if (locExtensions.length == 0) {

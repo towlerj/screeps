@@ -17,10 +17,12 @@ let roleRepairer = {
         }
 
         if (creep.memory.repairing) {
-            if (creep.repair(creep.memory.repairTarget) == ERR_NOT_IN_RANGE) {
+            const repTarget = Game.getObjectById(creep.memory.repairTarget);
+            if (creep.repair(repTarget) == ERR_NOT_IN_RANGE) {
                 //creep.moveTo(creep.memory.repairTarget, {visualizePathStyle: {stroke: '#ffffff'}});
-                creep.moveTo(creep.memory.repairTarget);
-                creep.say('r '); // + creep.memory.repairTarget.id);
+                creep.moveTo(repTarget);
+                //creep.say('r ' + repTarget.structureType); // + creep.memory.repairTarget.id);
+                //console.log(creep.name + ' r ' + repTarget.structureType);
             }
         } else {
             getSource.run(creep);

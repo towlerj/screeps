@@ -26,6 +26,10 @@ module.exports = {
                     s.energy < s.energyCapacity
             });
 
+            if (!structure){
+                structure = creep.room.storage;
+            }
+
             // if we found one
             if (structure != undefined) {
                 // try to transfer energy, if it is not in range
@@ -54,9 +58,9 @@ module.exports = {
             repairTargets.sort((a, b) => a.hits - b.hits);
             */
             let container = creep.room.find(FIND_STRUCTURES, {
-                filter: s => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0
+                filter: s => s.structureType == STRUCTURE_CONTAINER  && s.store[RESOURCE_ENERGY] > 0
             });
-            container.sort((a, b) => a.store[RESOURCE_ENERGY] - b.store[RESOURCE_ENERGY]);
+            container.sort((b,a) => a.store[RESOURCE_ENERGY] - b.store[RESOURCE_ENERGY]);
             const useContainer = container[0];
             /*
             let container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
