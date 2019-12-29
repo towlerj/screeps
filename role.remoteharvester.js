@@ -2,9 +2,11 @@ let roleHarvester = {
     /** @param {Creep} creep **/
     run: function(creep) {
         //const homeRoom = creep.memory.homeRoom;
-
-        if (creep.store.getFreeCapacity() > 0) {
-            let sources = creep.room.find(FIND_SOURCES);
+        const roomName = creep.memory.remoteroom;
+        if (roomName != creep.room.name) {
+            creep.moveTo(Game.rooms[roomName]);
+        } else if (creep.store.getFreeCapacity() > 0) {
+            let sources = Game.rooms[roomName].find(FIND_SOURCES);
             if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sources[0]);
             }
@@ -26,4 +28,4 @@ let roleHarvester = {
     }
 };
 
-module.exports = roleHarvester;
+module.exports = roleRemoteHarvester;

@@ -3,7 +3,7 @@ const roleHarvester = require('role.harvester');
 const roleBuilder = require('role.builder');
 const roleRepairer = require('role.repairer');
 const roleRoomTaker = require('role.roomtaker');
-const roleLongDistHarvester = require('role.longdistanceharvester');
+const roleRemoteHarvester = require('role.remoteharvester');
 const roleRemoteUpgrader = require('role.remoteUpgrader');
 const roleRemoteBuilder = require('role.remoteBuilder');
 const roomTasks = require('room.taskQueue');
@@ -25,9 +25,10 @@ module.exports = {
 
         if (type == 'roomtaker') {
             roleRoomTaker.run(creep, remoteRoom);
-        } else if (type == 'remoteupgrader') {
+        } /*else if (type == 'remoteupgrader') {
             roleRemoteUpgrader.run(creep, remoteRoom);
-        } else if (type == 'remotebuilder') {
+        } */
+        else if (type == 'remotebuilder') {
             let buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
             creep.memory.buildTarget = buildTargets[0];
             roleRemoteBuilder.run(creep, remoteRoom);
@@ -76,6 +77,21 @@ module.exports = {
         } else if (type == 'energytransfer') {
             roleEnergyTransfer.run(creep);
         } else {
+            /*
+            let repContainer = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_CONTAINER  && structure.hits < 235000)
+                }
+            });
+            //console.log(creep.room.name + ' rep ' + repContainer.length);
+            //console.log(repContainer.length);
+            let repairTargets = repContainer;
+            if (repContainer.length == 0){
+                repairTargets = creep.room.find(FIND_STRUCTURES, {
+                    filter: object => object.hits < object.hitsMax
+                });
+            }
+            */
             const repairTargets = creep.room.find(FIND_STRUCTURES, {
                 filter: object => object.hits < object.hitsMax
             });

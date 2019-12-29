@@ -20,6 +20,8 @@ let roleHarvester = {
         if (creep.store.getFreeCapacity() > 0) {
             getSource.run(creep);
         } else {
+            let targets;
+            if (creep.room.memory.roomcreeps > 0){
             let targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_TOWER) &&

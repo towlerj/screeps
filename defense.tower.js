@@ -14,11 +14,11 @@ module.exports = {
         var hostiles = Game.rooms[myRoomName].find(FIND_HOSTILE_CREEPS);
         var towers = Game.rooms[myRoomName].find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } });
         var healerHit = false;
-        
+
         //Alternative to finding towers:
         //var towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER);
 
-        //if there are hostileHealers - attack them    
+        //if there are hostileHealers - attack them
         if (hostileHealers.length > 0 && healerHit == false) {
             towers.forEach(tower => tower.attack(hostileHealers[0]));
             healerHit = true;
@@ -26,8 +26,8 @@ module.exports = {
                 console.log(myRoomName + " ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
             }
         }
-        
-        //if there are hostileAttackers - attack them    
+
+        //if there are hostileAttackers - attack them
         else if (hostileAttackers.length > 0) {
             towers.forEach(tower => tower.attack(hostileAttackers[0]));
             healerHit = false;
@@ -35,7 +35,7 @@ module.exports = {
                 console.log(myRoomName + " ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ALERT!!!! WE ARE UNDER ATTACK!!!!! ");
             }
         }
-        //if there are ANY Hostiles - attack them    
+        //if there are ANY Hostiles - attack them
         else if (hostiles.length > 0) {
             towers.forEach(tower => tower.attack(hostiles[0]));
             healerHit = false;
@@ -46,7 +46,7 @@ module.exports = {
 
         //if there are no hostiles....
         if (hostiles.length === 0) {
-            
+
             //....first heal any damaged creeps
             for (let name in Game.creeps) {
                 // get the creep object
@@ -62,14 +62,14 @@ module.exports = {
                 //Because we don't want to be exposed if something shows up at our door :)
                 //console.log ('in tower code: here');
                 if (i.energy > ((i.energyCapacity / 10) * 5)) {
-                    
+
                     //Find the closest damaged Structure
                     let closestDamagedStructure = towers.pos.findClosestByRange(FIND_STRUCTURES, { filter: (s) => s.hits < s.hitsMax });
                     //var closestDamagedStructure = towers.pos.findClosestByRange(FIND_STRUCTURES, { filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL && s.structureType != STRUCTURE_RAMPART });
                     if (closestDamagedStructure) {
                         towers.repair(closestDamagedStructure);
                         console.log("The tower is repairing buildings.");
-                    } 
+                    }
 
 
                 }

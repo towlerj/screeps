@@ -76,6 +76,13 @@ module.exports.loop = function() {
             creep.memory.role == 'harvester' && creep.memory.spawner == i
         ));
 
+        let remoteharvesters = _.filter(Game.creeps, (creep) => (
+            creep.memory.role == 'remoteharvester' && creep.memory.spawner == i
+        ));
+
+        //let harvesters = _.sum(roomCreeps, (c) => c.memory.role == 'harvester');
+
+
         //let harvesters = _.sum(roomCreeps, (c) => c.memory.role == 'harvester');
 
 
@@ -114,6 +121,7 @@ module.exports.loop = function() {
         let maxRoomTakers = 1;
         let minimumRemoteUpgraders = 1;
         let minimumRemoteBuilders = 2;
+        let minimumRemoteHarvesters = 0;
 
         if (thisRoom.energyCapacityAvailable < 500) {
             minimumHarvesters = 1;
@@ -203,6 +211,9 @@ module.exports.loop = function() {
             console.log(thisRoom.name);
             console.log(i + ' All: ' + allCreeps.length);
             console.log(i + ' Harvesters: ' + harvesters.length + ' of ' + minimumHarvesters);
+            if (minimumRemoteHarvesters > 0){
+                console.log(i + ' Remote Harvesters: ' + remoteharvesters.length + ' of ' + minimumRemoteHarvesters);
+            }
             console.log(i + ' Upgraders: ' + upgraders.length + ' of ' + minimumUpgraders);
             console.log(i + ' Builders: ' + builders.length + ' of ' + minimumBuilders);
             console.log(i + ' Repairers: ' + repairers.length + ' of ' + minimumRepairers);
@@ -262,7 +273,7 @@ module.exports.loop = function() {
 
             //else if (longDistanceHarvesters.length < minimumLongDistanceHarvester) {
             //    createCreep.run('longDistanceHarvester');
-            //} 
+            //}
             if (!spawnTrigger) {
                 if (takeRoom && roomtakers.length < maxRoomTakers) {
                     createCreep.run('roomtaker', i);
