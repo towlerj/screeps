@@ -28,8 +28,8 @@ let roleHarvester = {
                         structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
                 }
             });
-            if (targets.length == 0) {
-
+        }
+            if (!targets || targets.length == 0) {
                 //let targets;
                 targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {

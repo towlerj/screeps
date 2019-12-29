@@ -1,4 +1,4 @@
-let roleHarvester = {
+let roleRemoteHarvester = {
     /** @param {Creep} creep **/
     run: function(creep) {
         //const homeRoom = creep.memory.homeRoom;
