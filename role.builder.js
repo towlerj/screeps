@@ -24,8 +24,8 @@ var roleBuilder = {
             //    roleRepairer.run(creep);
             //}
 
-            const closestBuildTarget = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
-            creep.memory.buildTarget = closestBuildTarget;
+            //const closestBuildTarget = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+            //creep.memory.buildTarget = closestBuildTarget;
             if (creep.build(creep.memory.buildTarget) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.memory.buildTarget);
             }

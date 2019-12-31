@@ -19,8 +19,6 @@ module.exports = {
         }
         let type = creep.memory.role;
         let room = creep.room;
-        //let remoteRoom = 'W2N4';
-        //let remoteRoom = 'W1N4';
         let remoteRoom = 'W3N4';
 
 
@@ -28,11 +26,9 @@ module.exports = {
             roleRoomTaker.run(creep, remoteRoom);
         } else if (type == 'energydonater') {
             roleEnergyDonater.run(creep);
-        }
-        /*else if (type == 'remoteupgrader') {
-                   roleRemoteUpgrader.run(creep, remoteRoom);
-               } */
-        else if (type == 'remotebuilder') {
+        } else if (type == 'remoteupgrader') {
+            roleRemoteUpgrader.run(creep, remoteRoom);
+        } else if (type == 'remotebuilder') {
             let buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
             creep.memory.buildTarget = buildTargets[0];
             roleRemoteBuilder.run(creep, remoteRoom);
@@ -48,45 +44,30 @@ module.exports = {
         } else if (type == 'energytransfer') {
             roleEnergyTransfer.run(creep);
         } else {
-            /*
-            if (creep.room.memory.repairs.len == 0){
+            //if (creep.room.memory.cpulog) console.log('CreepController');
+            //if (creep.room.memory.cpulog) console.log('Repairs');
+            //if (creep.room.memory.cpulog) console.log("Start = " + Game.cpu.getUsed());
+
+            //let numRepairs = creep.room.memory.repairs.length;
+            //console.log(creep.name);
+            let numRepairs = 0;
+            numRepairs = creep.room.memory.repairs.length;
+            if (!creep.room.memory.repairs) {
                 roomFuncs.run(creep.room.name);
+            } else {
+                numRepairs = creep.room.memory.repairs.length;
             }
-            if (!creep.memory.repairs || creep.memory.repairs == ''){
-                console.log(creep.name + ' repair target - ' + creep.memort.repairs);
-                creep.memory.repairs = creep.room.memory.repairs.shift();
-                console.log(creep.name + ' repair target - ' + creep.memort.repairs);
-            }
-            */
-            let numRepairs = 1;
-            //if (Game.time % 7 == 1){
-            const repairTargets = creep.room.find(FIND_STRUCTURES, {
-                filter: object => object.hits < object.hitsMax
-            });
-            numRepairs = repairTargets.length;
 
-            repairTargets.sort((a, b) => a.hits - b.hits);
-            if (repairTargets.length > 0) {
-                let rNum = Math.min(Math.floor(Math.random() * 5), repairTargets.length - 1);
-                //console.log(repairTargets.length + ' - ' + rNum);
-                creep.memory.repairTarget = repairTargets[rNum].id;
-            }
-            //}
-            /* 
-            console.log(creep.room.name);
-            if (creep.room.memory.repairs.length == 0){
-                roomFuncs.run(creep.memory.name);
-            }
-            const thisRepair = creep.memory.repairs.shift();
-            creep.memory.repairTarget = thisRepair;
-            */
+            let useRoomRepairs = true;
 
+            //if (creep.room.memory.cpulog) console.log("End = " + Game.cpu.getUsed());
+
+            //if (creep.room.memory.cpulog) console.log("Build");
+            //if (creep.room.memory.cpulog) console.log("Start = " + Game.cpu.getUsed());
             const buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
             const closestBuildTarget = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
             creep.memory.buildTarget = closestBuildTarget;
-
             let numBuild = buildTargets.length;
-
 
             if (numRepairs < 1 && numBuild > 0) {
                 roleBuilder.run(creep);
@@ -104,6 +85,7 @@ module.exports = {
             } else {
                 roleUpgrader.run(creep);
             }
+
 
         }
 

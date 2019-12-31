@@ -10,7 +10,7 @@ let createCreep = {
         let maxEnergy = Game.spawns[spawnName].room.energyCapacityAvailable;
 
         //console.log('in spawn');
-        
+
         if (maxEnergy < 1500) {
             maxEnergy = Math.min(maxEnergy, 1000);
         }

@@ -10,7 +10,6 @@
 module.exports = function() {
     StructureSpawn.prototype.createCustomCreep =
         function(energy, roleName) {
-            //console.log(this.name + " " + roleName + " spawning");
             // let's create a name
             let newName = this.name + '_' + roleName + '_' + Game.time;
             let energyAvailable = this.room.energyAvailable;
@@ -25,7 +24,8 @@ module.exports = function() {
 
             // energy based body parts
             var noParts = Math.floor(energy / 200);
-            noParts = Math.min(15, noParts);
+            noParts = Math.min(25, noParts);
+
             var body = [];
             for (let i = 0; i < noParts; i++) {
                 body.push(WORK);
@@ -74,6 +74,8 @@ module.exports = function() {
             let newName = this.name + '_containerminer_' + Game.time;
             if (this.room.energyAvailable >= 600) {
                 return this.createCreep([WORK, WORK, WORK, WORK, WORK, CARRY, MOVE], newName, { role: 'containerminer', sourceID: mineSourceID, small: 1, spawner: this.name });
+            } else if (this.room.energyAvailable < 400) {
+                return this.createCreep([WORK, CARRY, MOVE], newName, { role: 'containerminer', sourceID: mineSourceID, small: 0, spawner: this.name });
             } else {
                 return this.createCreep([WORK, WORK, WORK, CARRY, MOVE], newName, { role: 'containerminer', sourceID: mineSourceID, small: 0, spawner: this.name });
             }

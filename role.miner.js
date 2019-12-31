@@ -3,63 +3,30 @@ module.exports = {
     run: function(creep) {
 
         let mySource = Game.getObjectById(creep.memory.sourceID);
-        //console.log('MySource: ' + mySource.id);
-        /*
-        if (creep.body.length < 7 && creep.room.energyAvailable > 700){
-            console.log(creep.name + ' goodbye cruel world');
-            creep.suicide();
-            
-        } 
-        */
-        // find container next to source
-        /*
-        if (!mySource){
-            console.log('miner container doesnt exist ' + creep.room.name);
-            const ret = creep.room.createConstructionSite(creep.pos,STRUCTURE_CONTAINER);
-            creep.say(ret);
-            creep.memort.ret = ret;
-            if (ret == OK){
-                creep.suicide();
-                return;
-            } 
-        } 
-        */
-
-            let container = mySource.pos.findInRange(FIND_STRUCTURES, 1, {
-                filter: s => s.structureType == STRUCTURE_CONTAINER
-            })[0];
-            /*
-            if (!container){
-                console.log('miner container doesnt exist ' + creep.room.name);
-                //const ret = creep.room.createConstructionSite(creep.pos,STRUCTURE_CONTAINER);
-                //creep.say(ret);
-                //creep.memort.ret = ret;
-                if (creep.room.createConstructionSite(creep.pos,STRUCTURE_CONTAINER) == OK){
-                    creep.suicide();
-                    
-                } 
-            }   
-            */
-            if (creep.pos.isEqualTo(container.pos)) {
-                
-                
-                if (Game.time % 27 == 1){
-                    creep.say('miner healing');
-                    //console.log(creep.name + ' container hits ' + container.hits);
-                    creep.repair(container);
-                    //console.log(creep.name + ' container hits ' + container.hits);
-                } else {
-                    creep.say('m ' + creep.room.memory.energyavailable);
-                    creep.harvest(mySource);
-                }
-
+        let container = mySource.pos.findInRange(FIND_STRUCTURES, 1, {
+            filter: s => s.structureType == STRUCTURE_CONTAINER
+        })[0];
+        if (creep.pos.isEqualTo(container.pos)) {
+            if (creep.memory.containerRepair && creep.store[RESOURCE_ENERGY] > 0 & container.hits < 250000) {
+                creep.say('miner healing 2');
+                creep.repair(container);
+            } else if (Game.time % 257 == 1) {
+                creep.say('miner healing 1');
+                creep.repair(container);
+                creep.memory.containerRepair = true;
+            } else {
+                creep.say('m ' + creep.room.memory.energyavailable);
+                creep.harvest(mySource);
+                creep.memory.containerRepair = false;
             }
-            // if creep is not on top of the container
-            else {
-                creep.say('mnr mv');
-                creep.moveTo(container);
-            }
-        
+
+        }
+        // if creep is not on top of the container
+        else {
+            creep.say('mnr mv');
+            creep.moveTo(container);
+        }
+
 
     }
 };

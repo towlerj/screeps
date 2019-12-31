@@ -45,17 +45,29 @@ let roleEnergyDonater = {
             } else {
                 //console.log('ED here ' + creep.room.name);
                 creep.say('ED in ' + remoteRoom);
-
-                let targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_EXTENSION ||
-                                structure.structureType == STRUCTURE_SPAWN ||
-                                structure.structureType == STRUCTURE_TOWER /*||
-                                structure.structureType == STRUCTURE_STORAGE*/
+                let targets;
+                if (remoteRoom == 'W2N4') {
+                    targets = creep.room.find(FIND_STRUCTURES, {
+                        filter: (structure) => {
+                            return (structure.structureType == STRUCTURE_EXTENSION ||
+                                    structure.structureType == STRUCTURE_SPAWN ||
+                                    structure.structureType == STRUCTURE_TOWER
                                 ) &&
-                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                    }
-                });
+                                structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                        }
+                    });
+                } else {
+                    targets = creep.room.find(FIND_STRUCTURES, {
+                        filter: (structure) => {
+                            return (structure.structureType == STRUCTURE_EXTENSION ||
+                                    structure.structureType == STRUCTURE_SPAWN ||
+                                    structure.structureType == STRUCTURE_TOWER ||
+                                    structure.structureType == STRUCTURE_STORAGE
+                                ) &&
+                                structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                        }
+                    });
+                }
                 if (targets.length > 0) {
                     let locTarget = creep.pos.findClosestByPath(targets);
                     if (creep.transfer(locTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {

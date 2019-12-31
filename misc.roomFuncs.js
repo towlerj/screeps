@@ -1,47 +1,46 @@
 module.exports = {
     run: function(roomName) {
-
         /*
-        console.log(roomName + ' funcs');
+        I want to store the repair targets in the room so:
+         - I need to search less often
+         - anyone in the room has an easy way of accessing them
+         - I can change repair target logic here, and have it affect all repeairers
+
+        Every time it's called I regen the repair list.
+        I first check if any of 'my' structures need to be repaired,
+        then look at all (which will include walls!)
+        I also clear out all repair memories from my creeps
+        */
+
+        console.log(roomName + ' here - roomfuncs');
+
         const thisRoom = Game.rooms[roomName];
         thisRoom.memory.repairs = [];
-        const repairTargets = thisRoom.find(FIND_STRUCTURES, {
+        let repairTargets = thisRoom.find(FIND_MY_STRUCTURES, {
             filter: object => object.hits < object.hitsMax
         });
-        let numRepairs = repairTargets.length;
-        repairTargets.sort((a, b) => a.hits - b.hits);
-        for (let x = 0;x< numRepairs;x++){
-            thisRoom.memory.repairs.push(repairTargets[x].id);
-        } 
-        
-        const allCreeps = _.filter(Game.creeps, (creep) => (
-             creep.room.name == roomName
-        ));
-        //let allCreeps = Game.rooms[roomName].creeps;
-        console.log(allCreeps);
-        for (let x = 0;x<allCreeps.name;x++){
-            console.log(allCreeps[x].name);
-            allCreeps[x].memory.repairs = '';
-        }
-        */
-
-        /*
-        if (Game.time % 11 == 1) {
-            let listExtensions = [];
-            console.log('In room funcs for ' + roomName);
-            const locExtensions = Game.rooms[roomName].find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == 'extension' && structure.energy > 0)
-                }
+        console.log(repairTargets.length);
+        if (!repairTargets || repairTargets.length == 0) {
+            console.log('room funcs here');
+            repairTargets = thisRoom.find(FIND_STRUCTURES, {
+                filter: object => object.hits < object.hitsMax
             });
-            //console.log('strucs length: ' + locExtensions.length);
-
-            for (let x = 0; x < locExtensions.length; x++) {
-                listExtensions.push(locExtensions[x].id);
-                //console.log(locExtensions[x].id + ' _ ' + locExtensions[x].structureType + " _ " + locExtensions[x].energy);
-            }
-            Game.rooms[roomName].memory.energyExtensions = listExtensions;
+            console.log('And now: ' + repairTargets.length);
         }
-        */
+        let numRepairs = repairTargets.length;
+
+
+        //console.log(roomName + ' repairs ' + repairTargets.length);
+        repairTargets.sort((a, b) => a.hits - b.hits);
+        for (let x = 0; x < numRepairs; x++) {
+            thisRoom.memory.repairs.push(repairTargets[x].id);
+        }
+        const allCreeps = _.filter(Game.creeps, (creep) => (
+            creep.room.name == roomName
+        ));
+        for (let x = 0; x < allCreeps.length; x++) {
+            allCreeps[x].memory.repairTarget = '';
+        }
+        thisRoom.memory.repairCounter = 0;
     }
 };
