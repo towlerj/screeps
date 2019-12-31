@@ -67,8 +67,19 @@ module.exports.loop = function() {
             thisRoom.memory.useSources = roomSources;
         }
 
-
-
+        let rMaxEnergy = thisRoom.energyAvailable;
+        
+        /*
+        let rLocStorage = thisRoom.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_STORAGE)
+                }
+            });
+            */
+        rMaxEnergy = rMaxEnergy + thisRoom.storage.store[RESOURCE_ENERGY];
+        
+        thisRoom.memory.energyavailable = rMaxEnergy;
+        
         let hostiles = thisRoom.find(FIND_HOSTILE_CREEPS).length;
         if (hostiles > 0) {
             thisRoom.memory.underAttack = true;
@@ -163,7 +174,7 @@ module.exports.loop = function() {
             minimumRemoteTakers = 1;
         } else if (thisRoom.energyCapacityAvailable > 2000) {
             minimumHarvesters = 0;
-            minimumUpgraders = 2;
+            minimumUpgraders = 3;
             minimumBuilders = 1;
             minimumRepairers = 2;
             minimumSuperHarvesters = 2;
@@ -172,8 +183,9 @@ module.exports.loop = function() {
             minimumRemoteTakers = 1;
 
         }
-        if (i == 'Spawn1') {
-            minimumEnergyDonaters = 0;
+        //creep.room.memory.energyavailable
+        if (i == 'Spawn1' && Game.rooms['W3N4'].energyAvailable < 4000) {
+            minimumEnergyDonaters = 2;
         }
 
         if (energydonaters.length < minimumEnergyDonaters) {
@@ -183,7 +195,7 @@ module.exports.loop = function() {
                 spawnTrigger = thisSpawn.createEnergyDonater('faebe566e23c5dc', 'W3N4');
             } else if (energydonaters.length == 1) {
 
-                spawnTrigger = thisSpawn.createEnergyDonater('faebe566e23c5dc', 'W2N4');
+                spawnTrigger = thisSpawn.createEnergyDonater('faebe566e23c5dc', 'W3N4');
 
             } else if (energydonaters.length == 2) {
 

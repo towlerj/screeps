@@ -49,7 +49,7 @@ module.exports = {
                     creep.repair(container);
                     //console.log(creep.name + ' container hits ' + container.hits);
                 } else {
-                    creep.say('mining');
+                    creep.say('m ' + creep.room.memory.energyavailable);
                     creep.harvest(mySource);
                 }
 

@@ -3,7 +3,10 @@ var miscSources = {
     /** @param {Creep} creep **/
     run: function(creep) {
         // I need energy!
-        let maxEnergy = creep.room.energyAvailable;
+        //let maxEnergy = creep.room.energyAvailable;
+        
+        //maxEnergy = maxEnergy + creep.room.storage.store[RESOURCE_ENERGY];
+        let maxEnergy = creep.room.memory.energyavailable;
         if (creep.memory.role == 'harvester' || creep.memory.role == 'superharvester' || maxEnergy < 1000) {
             var useSource = creep.memory.sources;
             var mySource;
