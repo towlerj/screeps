@@ -1,24 +1,36 @@
-
 module.exports = {
-    run: function(creep, claimroom) {
+    run: function(creep) {
         //console.log('RT ' + claimroom);
+        const claimroom = creep.memory.remoteroom;
         creep.say('RT ' + claimroom);
         //console.log(claimroom);
         let inRoom = creep.room.name;
-        
-        
-        console.log('mem ' +creep.memory.movingtoclaimroom);
+        let roomFlag = Game.flags[creep.memory.flagname];
+        //let roomPos = ['W2N6', 38, 47];
         if (claimroom != creep.room.name) {
-            creep.memory.movigntoclaimroom = true;
+            //console.log('mem ' + creep.memory.movingtoclaimroom);
+            //creep.moveTo(Game.rooms[claimroom]);
+            creep.moveTo(roomFlag);
+
         } else {
-            creep.memory.movingtoclaimroom = false;
+            if (creep.claimController(Game.rooms[claimroom].controller) == ERR_NOT_IN_RANGE) {
+                console.log('And here');
+                creep.moveTo(roomFlag);
+                //creep.moveTo(roomPos);
+                //creep.moveTo(Game.rooms[claimroom].controller);
+            }
         }
-        if (creep.memory.movingtoclaimroom){
-            console.log('Move to room ' + claimroom + ' - ' + creep.room.name);
-            creep.moveTo(Game.flags.Flag4);
-            
-            //creep.memory.movingtoclaimroom == false;
-        } else {
+
+
+        /*
+        console.log('Move to room ' + claimroom + ' - ' + creep.room.name);
+        let moveRes = creep.moveTo(roomFlag);
+        console.log(moveRes);
+        */
+
+        //creep.memory.movingtoclaimroom == false;
+        /*
+    } else {
             console.log('Got here in room taker');
             //let path = creep.pos.findPathTo(Game.rooms[claimroom].controller, {maxOps: 200});
             //let path = creep.pos.findPathTo(Game.flags.Flag4, {maxOps: 200});
@@ -27,10 +39,11 @@ module.exports = {
             //let path = creep.pos.findPathTo(target, {maxOps: 200});
             if (creep.claimController(Game.rooms[claimroom].controller) == ERR_NOT_IN_RANGE) {
                 console.log('And here');
-                creep.moveTo(Game.flags.Flag5);
+                creep.moveTo(roomFlag);
                 //creep.moveTo(Game.rooms[claimroom].controller);
             }
         }
+        */
 
     }
 };

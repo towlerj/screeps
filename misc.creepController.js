@@ -23,7 +23,7 @@ module.exports = {
 
 
         if (type == 'roomtaker') {
-            roleRoomTaker.run(creep, remoteRoom);
+            roleRoomTaker.run(creep);
         } else if (type == 'energydonater') {
             roleEnergyDonater.run(creep);
         } else if (type == 'remoteupgrader') {

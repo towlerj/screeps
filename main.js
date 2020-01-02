@@ -29,18 +29,18 @@ module.exports.loop = function() {
     //let myRooms = ['W2N5', 'W2N4', 'W1N4', 'W3N4'];
     //let myRooms = [];
     let homeRoom = 'W2N5';
-    let roomToTake = 'W2N7';
-    //let flagToTake = Flag4;
+    let roomToTake = 'W2N6';
+    let flagToFind = 'Flag4';
     // W3N4
     for (const i in Game.spawns) {
         let thisSpawn = Game.spawns[i];
         let thisRoom = thisSpawn.room;
         let tempStrucs = thisRoom.find(FIND_STRUCTURES);
-        if (tempStrucs.length != thisRoom.memory.structureCount){
+        if (tempStrucs.length != thisRoom.memory.structureCount) {
             thisRoom.memory.structureCount = tempStrucs.length;
             console.log('New strcture in ' + thisRoom.name);
             thisRoom.getRepairs();
-        }        
+        }
         if (!myRooms.includes(thisRoom.name)) {
             myRooms.push(thisRoom.name);
             console.log('Adding ' + thisRoom.name + ' at ' + myRooms.indexOf(thisRoom.name));
@@ -317,7 +317,7 @@ module.exports.loop = function() {
         } else if (harvesters.length == 0 && superharvesters.length == 0 && containerminers == 0) {
             spawnTrigger = createCreep.run('superharvester', i);
         } else if (roomtakers.length < maxRoomTakers && takeRoom) {
-            spawnTrigger = createCreep.run('roomtaker', i);
+            spawnTrigger = thisSpawn.createRoomTaker(roomToTake, flagToFind);
         } else if (builders.length < minimumBuilders && builders.length == 0) {
             spawnTrigger = createCreep.run('builder', i);
         } else if (upgraders.length < minimumUpgraders) {

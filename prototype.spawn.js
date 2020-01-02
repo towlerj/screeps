@@ -12,9 +12,9 @@ module.exports = function() {
         function(energy, roleName) {
             // let's create a name
             let newName = this.name + '_' + roleName + '_' + Game.time;
-            if (roleName == 'roomtaker'){
-                let body = [CLAIM,MOVE,MOVE,MOVE,MOVE,MOVE, MOVE];
-                return this.createCreep(body, newName, { role: roleName,  spawner: this.name, bodyParts: body });
+            if (roleName == 'roomtaker') {
+                let body = [CLAIM, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
+                return this.createCreep(body, newName, { role: roleName, spawner: this.name, bodyParts: body });
             }
             let energyAvailable = this.room.energyAvailable;
             // and get a default energy source
@@ -43,6 +43,13 @@ module.exports = function() {
 
             return this.createCreep(body, newName, { role: roleName, sources: sNumber, sourceID: srcName, spawner: this.name, bodyParts: body });
         };
+    StructureSpawn.prototype.createRoomTaker =
+        function(roomName, flagName) {
+            let newName = this.name + '_roomtaker_' + Game.time;
+            let body = [CLAIM, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
+            return this.createCreep(body, newName, { role: 'roomtaker', remoteroom: roomName, flagname: flagName, spawner: this.name, bodyParts: body });
+        };
+
     StructureSpawn.prototype.createRemoteHarvester =
         function(energy, roomName) {
             // let's create a name
