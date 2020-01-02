@@ -19,7 +19,7 @@ module.exports = {
         }
         let type = creep.memory.role;
         let room = creep.room;
-        let remoteRoom = 'W3N4';
+        let remoteRoom = 'W2N6';
 
 
         if (type == 'roomtaker') {

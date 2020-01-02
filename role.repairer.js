@@ -27,7 +27,7 @@ let roleRepairer = {
                     if (creep.room.memory.repairCounter + 1 >= creep.room.memory.repairs.length) {
                         //creep.room.memory.repairs = [];
                         creep.room.memory.repairCounter = 0;
-                        creep.room.structureType.getRepairs();
+                        //creep.room.getRepairs();
                         require('prototype.room')();
                         //console.log('regen room repairs ' + creep.room.memory.repairs.length + ' ' + creep.room.memory.repairCounter);
                         //roomFuncs.run(creep.room.name);
@@ -38,8 +38,8 @@ let roleRepairer = {
             }
             const repTarget = Game.getObjectById(creep.memory.repairTarget);
             /*
-            if (creep.room.name == 'W2N4') {
-                console.log(creep.room.memory.repairCounter + ' ' + creep.memory.repairTarget + ' - ' + repTarget.structureType);
+            if (creep.room.name == 'W3N4') {
+                console.log(creep.room.memory.repairCounter + ' ' + creep.memory.repairTarget + ' - ' + repTarget);
             }
             */
             creep.say('r rep');

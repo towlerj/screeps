@@ -12,6 +12,10 @@ module.exports = function() {
         function(energy, roleName) {
             // let's create a name
             let newName = this.name + '_' + roleName + '_' + Game.time;
+            if (roleName == 'roomtaker'){
+                let body = [CLAIM,MOVE,MOVE,MOVE,MOVE,MOVE, MOVE];
+                return this.createCreep(body, newName, { role: roleName,  spawner: this.name, bodyParts: body });
+            }
             let energyAvailable = this.room.energyAvailable;
             // and get a default energy source
             let sList = Game.spawns[this.name].room.find(FIND_SOURCES)

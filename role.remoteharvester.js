@@ -6,7 +6,8 @@ let roleRemoteHarvester = {
         if (roomName != creep.room.name) {
             creep.moveTo(Game.rooms[roomName]);
         } else if (creep.store.getFreeCapacity() > 0) {
-            let sources = Game.rooms[roomName].find(FIND_SOURCES);
+            //let sources = Game.rooms[roomName].find(FIND_SOURCES);
+            let sources = creep.pos.findClosestByPath(FIND_SOURCES);
             if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sources[0]);
             }
